@@ -17,6 +17,30 @@ app.get('/api/v1/listUsers', function (req, res) {
   })
 })
 
+app.post('/api/v1/addUser', function (req, res) {
+  const { user, name, password, profession } = req.query
+
+  fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
+    data = JSON.parse(data)
+    data['user' + user] = {
+      name,
+      password,
+      profession,
+      id: parseInt(user)
+    }
+    fs.writeFile(__dirname + '/data/users.json', JSON.stringify(data), err => {
+      if (err) {
+        console.error(err)
+      }
+    })
+    if (err) {
+      console.error(err)
+    }
+    console.log(data)
+    res.end(JSON.stringify(data))
+  })
+})
+
 app.delete('/api/v1/deleteUser', function (req, res) {
   fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
     data = JSON.parse(data)
