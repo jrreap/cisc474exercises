@@ -10,6 +10,30 @@ app.use(function (req, res, next) {
   next()
 })
 
+app.get('/api/v1/listUsers', function (req, res) {
+  fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
+    console.log(data)
+    res.end(data)
+  })
+})
+
+app.delete('/api/v1/deleteUser', function (req, res) {
+  fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
+    data = JSON.parse(data)
+    delete data['user' + req.query.user]
+    fs.writeFile(__dirname + '/data/users.json', JSON.stringify(data), err => {
+      if (err) {
+        console.error(err)
+      }
+    })
+    if (err) {
+      console.error(err)
+    }
+    console.log(data)
+    res.end(JSON.stringify(data))
+  })
+})
+
 app.use('/', express.static(path.join(__dirname, '')))
 
 app.listen(port, () => {
