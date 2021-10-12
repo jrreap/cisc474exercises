@@ -12,8 +12,24 @@ app.use(function (req, res, next) {
 
 app.get('/api/v1/listUsers', function (req, res) {
   fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
+    if (err) {
+      console.error(err)
+    }
     console.log(data)
     res.end(data)
+  })
+})
+
+app.get('/api/v1/:id', function (req, res) {
+  const { id } = req.params
+  fs.readFile(__dirname + '/data/' + 'users.json', 'utf8', function (err, data) {
+    data = JSON.parse(data)
+    const user = data['user' + id]
+    if (err) {
+      console.error(err)
+    }
+    console.log(user)
+    res.end(JSON.stringify(user))
   })
 })
 
